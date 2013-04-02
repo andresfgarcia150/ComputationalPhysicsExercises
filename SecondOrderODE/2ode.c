@@ -1,0 +1,75 @@
+// Universidad de los Andes
+// Física computacional
+// Solving ODE
+//		y"=-4sin(y)
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#define condInicial1 4
+#define condInicial2 0
+#define x_Final 10
+
+double function(double y, double x);
+double slope1(double x, double y1, double y2, double h);
+double slope2(double x, double y1, double y2, double h);
+
+int main()
+{
+	int i;
+	double h = 0.001;
+	int n_points = x_Final/h;
+	double* y1_array = malloc(sizeof(double)*n_points);
+	double* x_array = malloc(sizeof(double)*n_points);
+	double* y2_array = malloc(sizeof(double)*n_points);
+	FILE 	*fileOut;
+	if(!y1_array && !x_array && !y2_array)
+	{
+		printf("Problema creando el arreglo");
+		exit(1);
+	}
+	
+	y1_array[0] = condInicial1;
+	y2_array[0] = condInicial2;
+	x_array[0] = 0;
+
+	fileOut = fopen("fileOut.txt","w");
+	if (!fileOut)
+	{
+		printf("Problema creando el archivo");
+		exit(1);
+	}
+	fprintf(fileOut,"%f    %f    %f\n", x_array[0], y1_array[0], y2_array[0]);
+	for(i = 1; i<n_points; i++)
+	{
+		x_array[i] = i*h;
+		y1_array[i] = y1_array[i-1] + slope1(x_array[i-1],y1_array[i-1],y2_array[i-1],h)*h;
+		y2_array[i] = y2_array[i-1] + slope2(x_array[i-1],y1_array[i-1],y2_array[i-1],h)*h;
+		fprintf(fileOut,"%f    %f    %f\n", x_array[i], y1_array[i], y2_array[i]);
+	}
+	fclose(fileOut);
+}
+
+double function(double x, double y)
+{
+	return (-4*(sin(y)));
+}
+
+double slope1(double x, double y1, double y2, double h)
+{
+	double k1 = y2;
+	double k2 = y2 + k1*h/2;
+	double k3 = y2 + k2*h/2;
+	double k4 = y2 + k3*h;
+	return (k1+2*k2+2*k3+k4)/6;
+}
+
+double slope2(double x, double y1, double y2, double h)
+{
+	double k1 = function(x,y1);
+	double k2 = function(x + h/2, y1 + k1*h/2);
+	double k3 = function(x + h/2, y1 + k2*h/2);
+	double k4 = function(x + h, y1 + k3*h);
+	return (k1+2*k2+2*k3+k4)/6;
+}
