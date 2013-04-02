@@ -1,7 +1,8 @@
 // Universidad de los Andes
 // Física computacional
-// Solving ODE
+// Solving Second order ODEs
 //		y"=-4sin(y)
+// The function can be modified changing the expression of function
 
 #include <stdlib.h>
 #include <stdio.h>
