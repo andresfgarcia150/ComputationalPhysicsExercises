@@ -1,0 +1,2 @@
+prueba.exe: 2ode.o function.o slope1.o slope2.o
+	cc -lm

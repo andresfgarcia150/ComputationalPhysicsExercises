@@ -1,0 +1,9 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+double function(double x, double y)
+{
+	return (-4*(sin(y)));
+}
